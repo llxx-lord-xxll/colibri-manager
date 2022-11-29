@@ -18,12 +18,16 @@ export default [
     to: "/dashboard",
     icon: mdiMonitor,
     label: "Dashboard",
-  },
-  {
-    to: "/tables",
-    label: "Tables",
-    icon: mdiTable,
-  },
+  }, {
+        to: "/clients",
+        icon: mdiMonitor,
+        label: "Clients",
+    },
+    {
+        to: "/backup-restore",
+        icon: mdiMonitor,
+        label: "Backup/Restore",
+    },
   {
     to: "/forms",
     label: "Forms",

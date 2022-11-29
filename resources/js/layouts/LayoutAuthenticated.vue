@@ -97,13 +97,12 @@ const menuClick = (event, item) => {
       />
       <slot />
       <FooterBar>
-        Get more with
+        Powered by
         <a
-          href="https://tailwind-vue.justboil.me/"
+          href="#"
           target="_blank"
           class="text-blue-600"
-          >Premium version</a
-        >
+          >Colibri</a>
       </FooterBar>
     </div>
   </div>

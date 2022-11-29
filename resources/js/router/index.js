@@ -21,6 +21,52 @@ const routes = [
     name: "dashboard",
     component: Home,
   },
+{
+    path: "/clients",
+    children: [
+        {
+            meta: {
+                title: "Clients",
+            },
+            path: "",
+            name: "clients",
+            component: () => import("@/views/Clients.vue"),
+        },
+        {
+            meta: {
+                title: "New client",
+            },
+            path: "new",
+            name: "addClient",
+            component: () => import("@/views/AddClient.vue"),
+        },
+    ]
+},
+    {
+        meta: {
+            title: "Backup/Restore",
+        },
+        path: "/backup-restore",
+        children: [
+            {
+                meta: {
+                    title: "Clients",
+                },
+                path: "",
+                name: "backuprestore",
+                component: () => import("@/views/BackupRestore.vue"),
+            },
+            {
+                meta: {
+                    title: "Create Backup",
+                },
+                path: "new",
+                name: "createBackup",
+                component: () => import("@/views/CreateBackup.vue"),
+            },
+            ]
+    },
+
   {
     meta: {
       title: "Tables",
