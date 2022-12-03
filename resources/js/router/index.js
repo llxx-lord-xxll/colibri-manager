@@ -1,56 +1,63 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import Style from "@/views/StyleView.vue";
+import {createRouter, createWebHashHistory} from "vue-router";
 import Home from "@/views/HomeView.vue";
+import store from '@/stores'
 
 const routes = [
-  {
-    meta: {
-      title: "Select style",
-    },
-    path: "/",
-    name: "style",
-    component: Style,
-  },
-  {
-    // Document title tag
-    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
-    meta: {
-      title: "Dashboard",
-    },
-    path: "/dashboard",
-    name: "dashboard",
-    component: Home,
-  },
-{
-    path: "/clients",
-    children: [
-        {
-            meta: {
-                title: "Clients",
-            },
-            path: "",
-            name: "clients",
-            component: () => import("@/views/Clients.vue"),
-        },
-        {
-            meta: {
-                title: "New client",
-            },
-            path: "new",
-            name: "addClient",
-            component: () => import("@/views/AddClient.vue"),
-        },
-    ]
-},
     {
         meta: {
-            title: "Backup/Restore",
+            title: "Login",
+            middleware: "guest",
+        },
+        path: "/",
+        name: "login",
+        component: () => import("@/views/LoginView.vue"),
+    },
+    {
+        // Document title tag
+        // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+        meta: {
+            title: "Dashboard", middleware: "auth",
+        },
+        path: "/dashboard",
+        name: "dashboard",
+        component: Home,
+    },
+    {
+        meta: {
+            middleware: "auth"
+        },
+        path: "/clients",
+        children: [
+            {
+                meta: {
+                    title: "Clients",
+                    middleware: "auth",
+                },
+                path: "",
+                name: "clients",
+                component: () => import("@/views/Clients.vue"),
+            },
+            {
+                meta: {
+                    title: "New client",
+                    middleware: "auth",
+                },
+                path: "new",
+                name: "addClient",
+                component: () => import("@/views/AddClient.vue"),
+            },
+        ]
+    },
+    {
+        meta: {
+            middleware: "auth",
         },
         path: "/backup-restore",
         children: [
             {
                 meta: {
-                    title: "Clients",
+                    title: "Backup/Restore",
+                    middleware: "auth",
                 },
                 path: "",
                 name: "backuprestore",
@@ -59,78 +66,54 @@ const routes = [
             {
                 meta: {
                     title: "Create Backup",
+                    middleware: "auth",
                 },
                 path: "new",
                 name: "createBackup",
                 component: () => import("@/views/CreateBackup.vue"),
             },
-            ]
+        ]
     },
-
-  {
-    meta: {
-      title: "Tables",
+    {
+        meta: {
+            title: "Profile", middleware: "auth",
+        },
+        path: "/profile",
+        name: "profile",
+        component: () => import("@/views/ProfileView.vue"),
     },
-    path: "/tables",
-    name: "tables",
-    component: () => import("@/views/TablesView.vue"),
-  },
-  {
-    meta: {
-      title: "Forms",
+    {
+        meta: {
+            title: "Error",middleware: "auth",
+        },
+        path: "/error",
+        name: "error",
+        component: () => import("@/views/ErrorView.vue"),
     },
-    path: "/forms",
-    name: "forms",
-    component: () => import("@/views/FormsView.vue"),
-  },
-  {
-    meta: {
-      title: "Profile",
-    },
-    path: "/profile",
-    name: "profile",
-    component: () => import("@/views/ProfileView.vue"),
-  },
-  {
-    meta: {
-      title: "Ui",
-    },
-    path: "/ui",
-    name: "ui",
-    component: () => import("@/views/UiView.vue"),
-  },
-  {
-    meta: {
-      title: "Responsive layout",
-    },
-    path: "/responsive",
-    name: "responsive",
-    component: () => import("@/views/ResponsiveView.vue"),
-  },
-  {
-    meta: {
-      title: "Login",
-    },
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/LoginView.vue"),
-  },
-  {
-    meta: {
-      title: "Error",
-    },
-    path: "/error",
-    name: "error",
-    component: () => import("@/views/ErrorView.vue"),
-  },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { top: 0 };
-  },
+    history: createWebHashHistory(),
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        return savedPosition || {top: 0};
+    },
 });
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title
+    if (to.meta.middleware === "guest") {
+        if (store.state.auth.authenticated) {
+            next({ name: "dashboard" })
+        }
+        next()
+    } else {
+        if (store.state.auth.authenticated) {
+            next()
+        } else {
+            next({ name: "login" })
+        }
+    }
+})
 
 export default router;

@@ -50,7 +50,7 @@ const transactionBarItems = computed(() => mainStore.history);
         main
       >
         <BaseButton
-          href="https://github.com/justboil/admin-one-vue-tailwind"
+          href="#"
           target="_blank"
           :icon="mdiGithub"
           label="Star on GitHub"
@@ -142,3 +142,13 @@ const transactionBarItems = computed(() => mainStore.history);
     </SectionMain>
   </LayoutAuthenticated>
 </template>
+<script>
+export default {
+    name:"dashboard",
+    data(){
+        return {
+            user:this.$store.state.auth.user
+        }
+    }
+}
+</script>

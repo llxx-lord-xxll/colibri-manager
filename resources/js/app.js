@@ -5,15 +5,16 @@ import App from "./App.vue";
 import router from "./router";
 import { useMainStore } from "./stores/main.js";
 import { useStyleStore } from "./stores/style.js";
+import store from '@/stores'
 import { darkModeKey, styleKey } from "./config.js";
 
 import "./../../resources/css/main.css";
 
 /* Init Pinia */
 const pinia = createPinia();
-
-createApp(App).use(router).use(pinia).mount("#app");
-
+const app = createApp(App)
+app.use(router).use(pinia).mount("#app");
+app.use(store)
 
 /* Init Pinia stores */
 const mainStore = useMainStore(pinia);
@@ -36,7 +37,7 @@ if (
 }
 
 /* Default title tag */
-const defaultDocumentTitle = "Admin One Vue 3 Tailwind";
+const defaultDocumentTitle = "Colibri Manager";
 
 /* Set document title from route meta */
 router.afterEach((to) => {
